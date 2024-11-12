@@ -18,7 +18,7 @@ export default function Loading(){
 
     return (
         <motion.main 
-            className='flex flex-col place-items-center h-full items-center place-content-center '
+            className='flex flex-col place-items-center h-full items-center place-content-center bg-[#C69DD2] '
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }} // Fade-out animation on exit

@@ -41,7 +41,7 @@ export default function Booking(){
         setFormData(prev => ({
             ...prev,
             people,
-            shoes: Array(people).fill(0)  // Update shoe array based on number of bowlers
+            shoes: people ? Array(people).fill(0) : [0] // Update shoe array based on number of bowlers
         }));
     }
 
@@ -103,7 +103,7 @@ export default function Booking(){
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }} // Fade-out animation on exit
             transition={{ duration: 1 }} // Adjust duration for smoother exit
-            className='flex flex-col place-items-center'>
+            className='flex flex-col place-items-center bg-[#C69DD2] min-h-screen h-fit'>
             <Nav />
             <header className='flex flex-col place-items-center mt-5'>
                 <img src={FireIcon} alt="fire logo" className='w-[64px]' />
@@ -126,7 +126,7 @@ export default function Booking(){
                             min={todaysDateValue}
                             onChange={handleDateChange}
                             required
-                            className="text-lg font-light text-black p-3  w-[160px] focus:outline-none [w-[160px]"
+                            className="bg-transparent text-lg font-light text-black p-3  w-[160px] focus:outline-none [w-[160px]"
                         />
                     </fieldset>
                     <fieldset className="border-2 border-custom-purple rounded-md ">
@@ -139,7 +139,7 @@ export default function Booking(){
                             max='22:00'
                             required
                             onChange={handleTimeChange}
-                            className="text-lg font-light text-black p-3  w-[160px] focus:outline-none"
+                            className="bg-transparent text-lg font-light text-black p-3  w-[160px] focus:outline-none"
                         />
                     </fieldset>
                 </section>
@@ -153,7 +153,7 @@ export default function Booking(){
                             min={1}
                             onChange={handleNumOfBowlers}
                             required
-                            className="text-2xl font-light text-black p-3  w-[160px] focus:outline-none"
+                            className=" placeholder:text-black bg-transparent text-2xl font-light text-black p-3  w-[160px] focus:outline-none"
                         />
                     </fieldset>
                     <fieldset className="border-2 border-custom-purple rounded-md ">
@@ -164,7 +164,7 @@ export default function Booking(){
                             placeholder='1 lane'
                             onChange={handleNumOfLanes}
                             required
-                            className="text-2xl font-light text-black p-3  w-[160px] focus:outline-none"
+                            className="placeholder:text-black bg-transparent text-2xl font-light text-black p-3  w-[160px] focus:outline-none"
                         />
                     </fieldset>
                 </section>

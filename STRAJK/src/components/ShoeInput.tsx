@@ -8,7 +8,7 @@ export default function ShoeInput({bowlerNum, handleShoeInput}){
                 name="" 
                 id="shoeSize" 
                 required
-                className="text-2xl font-light text-black p-3 w-full focus:outline-none"
+                className="bg-transparent text-2xl font-light text-black p-3 w-full focus:outline-none"
                 onChange={(event) => handleShoeInput(event, bowlerNum)}
                 >
                     <option value="35">Euro 35</option>

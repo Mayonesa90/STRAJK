@@ -15,7 +15,7 @@ export default function Confirmation(){
 
     return (
         <motion.main 
-            className='flex flex-col place-items-center'
+            className='flex flex-col place-items-center bg-[#C69DD2] min-h-screen h-fit'
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }} // Fade-out animation on exit
