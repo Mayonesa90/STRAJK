@@ -10,6 +10,7 @@ export interface bookingRes {
     lanes: number,
     people: number,
     shoes: number[],
+    price: number,
     id: string,
     active: boolean
 }

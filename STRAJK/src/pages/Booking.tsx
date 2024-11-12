@@ -4,6 +4,7 @@ import ShoeForm from '../components/ShoeForm'
 import PostBookingBtn from '../components/PostBookingBtn'
 import Nav from '../components/Nav'
 import { bookingReq, bookingRes } from '../interfaces/bookingInterface'
+import { useStore } from '../hooks/store'
 
 export default function Booking(){
     const today = new Date()
@@ -14,6 +15,7 @@ export default function Booking(){
     const [numOfLanes, setNumOfLanes] = useState<number>(1)
     const [bowlerArray, setBowlerArray] = useState<number[]>([0])
     const [shoeArray, setShoeArray] = useState<number[]>([0])
+    const { booking, setBooking } = useStore()
     
     const [formData, setFormData] = useState<bookingReq>({
         when: "",
@@ -54,7 +56,7 @@ export default function Booking(){
     const value : string = "738c6b9d-24cf-47c3-b688-f4f4c5747662"
     const url : string = "https://h5jbtjv6if.execute-api.eu-north-1.amazonaws.com"
 
-    async function postData(formData) {
+    async function postData(formData : bookingReq) {
         const response = await fetch(url, {
             method: 'POST',
             mode: 'cors',
@@ -68,26 +70,25 @@ export default function Booking(){
             body: JSON.stringify(formData)
         });
 
-        const data : bookingReq = await response.json();
-        console.log(data);
-        
-        return data
+        const data : bookingRes = await response.json();
+        return setBooking(data);
     }
 
-    const handleClick = async (event) => {
-        await event.preventDefault()
+    const handleClick = (event) => {
+        event.preventDefault()
         setFormData({
-            when: date + "T" + time,
+            when: `${date}T${time}`,
             lanes: numOfLanes,
             people: numOfBowlers,
             shoes: shoeArray
         })
-        await postData(formData)
     }
 
     useEffect(() => {
-        console.log(formData);
-    }, [formData])
+        if (formData.when) {
+            postData(formData);
+        }
+    }, [formData]);
     
     return (
         <main className='flex flex-col place-items-center'>

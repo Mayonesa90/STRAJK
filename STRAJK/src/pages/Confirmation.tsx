@@ -1,8 +1,17 @@
 import ConfirmBookingBtn from "../components/ConfirmBookingBtn"
 import FireIcon from '../assets/fire-icon.svg'
 import Nav from '../components/Nav'
+import { useStore } from '../hooks/store'
 
 export default function Confirmation(){
+
+    const booking = useStore()
+    const { when, lanes, people, shoes, price, id } = booking.booking
+
+    console.log(when);
+    
+    
+    console.log('booking on Confirmation: ', booking.booking);
     return (
         <main className='flex flex-col place-items-center'>
             <Nav />
@@ -22,8 +31,8 @@ export default function Confirmation(){
                         <input
                             type="text"
                             id="when"
-                            placeholder='21:00, 3 dec'
-                            className="text-2xl font-light text-black p-3  w-[160px] focus:outline-none"
+                            placeholder={when}
+                            className="text-2xl font-light text-black p-3   focus:outline-none"
                         />
                     </fieldset>
                     <fieldset className="border-2 border-custom-purple rounded-md ">
@@ -31,7 +40,7 @@ export default function Confirmation(){
                         <input
                             type="text"
                             id="who"
-                            placeholder='3 pers'
+                            placeholder={`${people} people`}
                             className="text-2xl font-light text-black p-3  w-[160px] focus:outline-none"
                         />
                     </fieldset>
@@ -40,7 +49,7 @@ export default function Confirmation(){
                         <input
                             type="text"
                             id="lanes"
-                            placeholder='1 lane'
+                            placeholder={`${lanes} lanes`}
                             className="text-2xl font-light text-black p-3  w-[160px] focus:outline-none"
                         />
                     </fieldset>
@@ -49,14 +58,14 @@ export default function Confirmation(){
                         <input
                             type="text"
                             id="bookingNum"
-                            placeholder='STR8122744'
-                            className="text-2xl font-light text-black p-3  w-[160px] focus:outline-none"
+                            placeholder={id}
+                            className="text-2xl font-light text-black p-3 focus:outline-none"
                         />
                     </fieldset>
                 </section>
                 <section className="flex justify-between border-custom-red border-solid border-[1px] text-custom-red px-[16px] py-[12px] rounded-md text-[24px]">
                     <h3 className="font-WorkSans font-bold">total</h3>
-                    <h3>460sek</h3>
+                    <h3>{price} sek</h3>
                 </section>
                 <ConfirmBookingBtn />
                 </form>
