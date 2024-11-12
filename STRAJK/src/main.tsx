@@ -7,7 +7,7 @@ import { BrowserRouter as Router } from 'react-router-dom'
 
 ReactDom.createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <Router>
+    <Router future={{ v7_relativeSplatPath: true}}>
       <App />
     </Router>
   </StrictMode>

@@ -19,8 +19,8 @@ export default function Nav(){
                 <img src={NavIconOpen} alt="" />
             </button> 
             <ul className=' font-BebasNeune text-custom-red flex flex-col gap-[48px] text-[48px] text-center h-full  place-content-center'>
-                <li><Link to="/booking">BOOKING</Link></li>
-                <li><Link to="/confirmation">CONFIRMATION</Link></li>
+                <li><Link to="../booking">BOOKING</Link></li>
+                <li><Link to="../confirmation">CONFIRMATION</Link></li>
             </ul>
         </nav>
         

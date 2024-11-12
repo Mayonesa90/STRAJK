@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react'
 import ShoeForm from '../components/ShoeForm'
 import PostBookingBtn from '../components/PostBookingBtn'
 import Nav from '../components/Nav'
-import { bookingReq } from '../interfaces/bookingInterface'
+import { bookingReq, bookingRes } from '../interfaces/bookingInterface'
 
 export default function Booking(){
     const today = new Date()
@@ -49,14 +49,45 @@ export default function Booking(){
         setShoeArray(updatedShoeArray)        
     }
 
-    const handleClick = () => {
+    //POST TO API
+    const key : string = "x-api-key"
+    const value : string = "738c6b9d-24cf-47c3-b688-f4f4c5747662"
+    const url : string = "https://h5jbtjv6if.execute-api.eu-north-1.amazonaws.com"
+
+    async function postData(formData) {
+        const response = await fetch(url, {
+            method: 'POST',
+            mode: 'cors',
+            cache: 'no-cache',
+            credentials: 'same-origin',
+            headers: {
+                [key]: value
+            },
+            redirect: 'follow',
+            referrerPolicy: 'no-referrer',
+            body: JSON.stringify(formData)
+        });
+
+        const data : bookingReq = await response.json();
+        console.log(data);
+        
+        return data
+    }
+
+    const handleClick = async (event) => {
+        await event.preventDefault()
         setFormData({
             when: date + "T" + time,
             lanes: numOfLanes,
             people: numOfBowlers,
             shoes: shoeArray
         })
+        await postData(formData)
     }
+
+    useEffect(() => {
+        console.log(formData);
+    }, [formData])
     
     return (
         <main className='flex flex-col place-items-center'>
@@ -65,7 +96,7 @@ export default function Booking(){
                 <img src={FireIcon} alt="fire logo" className='w-[64px]' />
                 <h1 className=' font-BebasNeune text-custom-red text-[60px] tracking-wide'>BOOKING</h1>
             </header>
-            <form action="" className='w-[344px] flex flex-col gap-4'>
+            <form action="POST" className='w-[344px] flex flex-col gap-4'>
                 <header className='flex place-content-evenly place-items-center gap-2'>
                     <hr  className=' border-s-2 border-custom-purple w-[30%]'/>
                     <h2 className=' font-BebasNeune text-[24px] text-custom-purple flex-shrink-0'>WHEN, WHAT & WHO</h2>
@@ -124,7 +155,7 @@ export default function Booking(){
                     </fieldset>
                 </section>
                     {numOfBowlers > 0 ? <ShoeForm bowlerArray={bowlerArray} handleShoeInput={handleShoeInput}/> : null}
-                    <PostBookingBtn handleClick={handleClick} />
+                    <PostBookingBtn handleClick={handleClick} formData={formData} />
                 </form>
                 
         </main>

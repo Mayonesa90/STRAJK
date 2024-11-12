@@ -1,5 +1,8 @@
-export default function PostBookingBtn({handleClick}){
 
+
+
+export default function PostBookingBtn({handleClick, formData}){
+    
     const key : string = "x-api-key"
     const value : string = "738c6b9d-24cf-47c3-b688-f4f4c5747662"
     const url : string = "https://h5jbtjv6if.execute-api.eu-north-1.amazonaws.com"
