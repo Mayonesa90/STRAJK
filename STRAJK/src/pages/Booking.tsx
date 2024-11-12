@@ -3,27 +3,34 @@ import { useState, useEffect } from 'react'
 import ShoeForm from '../components/ShoeForm'
 import PostBookingBtn from '../components/PostBookingBtn'
 import Nav from '../components/Nav'
+import { bookingReq } from '../interfaces/bookingInterface'
 
 export default function Booking(){
-    //todays date in the format "11 nov"
     const today = new Date()
-    //todays date in the format "2024-11-11"
     const todaysDateValue = today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate()
-    const [todaysDate, setTodaysDate] = useState(todaysDateValue)
+    const [date, setDate] = useState(todaysDateValue)
     const [time, setTime] = useState("21:00")
-    const [numOfBowlers, setNumOfBowlers] = useState([1])
-    const [numOfLanes, setNumOfLanes] = useState(1)
-    const [bowlerArray, setBowlerArray] = useState([1])
+    const [numOfBowlers, setNumOfBowlers] = useState<number>(0)
+    const [numOfLanes, setNumOfLanes] = useState<number>(1)
+    const [bowlerArray, setBowlerArray] = useState<number[]>([0])
+    const [shoeArray, setShoeArray] = useState<number[]>([0])
+    
+    const [formData, setFormData] = useState<bookingReq>({
+        when: "",
+        lanes: 0,
+        people: 0,
+        shoes: [0]
+    })
 
     const handleDateChange = (event) => {
-        setTodaysDate(event.target.value)
+        setDate(event.target.value)
     }
 
-    const handleTimeChange = (event) => {
+    const handleTimeChange = (event: string) => {
         setTime(event.target.value)
     }
 
-    const handleNumOfBowlers = (event) => {
+    const handleNumOfBowlers = (event: number) => {
         setNumOfBowlers(event.target.value)
     }
 
@@ -32,11 +39,25 @@ export default function Booking(){
         setBowlerArray(updatedBowlerArray)
     }, [numOfBowlers])
     
-    const handleNumOfLanes = (event) => {
+    const handleNumOfLanes = (event: number) => {
         setNumOfLanes(event.target.value)
     }
 
+    const handleShoeInput = (event, bowlerNum) => {
+        const updatedShoeArray = [...shoeArray]
+        updatedShoeArray[bowlerNum - 1] = event.target.value
+        setShoeArray(updatedShoeArray)        
+    }
 
+    const handleClick = () => {
+        setFormData({
+            when: date + "T" + time,
+            lanes: numOfLanes,
+            people: numOfBowlers,
+            shoes: shoeArray
+        })
+    }
+    
     return (
         <main className='flex flex-col place-items-center'>
             <Nav />
@@ -56,11 +77,11 @@ export default function Booking(){
                         <input
                             type="date"
                             id="date"
-                            placeholder={todaysDate}
-                            min={todaysDate}
+                            placeholder={date}
+                            // min={today}
                             onChange={handleDateChange}
                             required
-                            className="text-2xl font-light text-black p-3  w-[160px] focus:outline-none [w-[160px]"
+                            className="text-lg font-light text-black p-3  w-[160px] focus:outline-none [w-[160px]"
                         />
                     </fieldset>
                     <fieldset className="border-2 border-custom-purple rounded-md ">
@@ -73,7 +94,7 @@ export default function Booking(){
                             max='22:00'
                             required
                             onChange={handleTimeChange}
-                            className="text-2xl font-light text-black p-3  w-[160px] focus:outline-none"
+                            className="text-lg font-light text-black p-3  w-[160px] focus:outline-none"
                         />
                     </fieldset>
                 </section>
@@ -84,6 +105,7 @@ export default function Booking(){
                             type="number"
                             id="bowlers"
                             placeholder='3 pers'
+                            min={1}
                             onChange={handleNumOfBowlers}
                             required
                             className="text-2xl font-light text-black p-3  w-[160px] focus:outline-none"
@@ -101,8 +123,8 @@ export default function Booking(){
                         />
                     </fieldset>
                 </section>
-                    <ShoeForm bowlerArray={bowlerArray} />
-                    <PostBookingBtn />
+                    {numOfBowlers > 0 ? <ShoeForm bowlerArray={bowlerArray} handleShoeInput={handleShoeInput}/> : null}
+                    <PostBookingBtn handleClick={handleClick} />
                 </form>
                 
         </main>

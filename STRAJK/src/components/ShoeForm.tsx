@@ -2,10 +2,7 @@ import {useState} from 'react'
 import ShoeInput from './ShoeInput'
 
 
-export default function ShoeForm({bowlerArray}){
-
-    console.log(bowlerArray);     
-    
+export default function ShoeForm({bowlerArray, handleShoeInput}){    
     
     return (
         <form action="" className='w-[344px] flex flex-col gap-4'>
@@ -16,7 +13,7 @@ export default function ShoeForm({bowlerArray}){
                 </header>
                 <section className='flex gap-6 flex-col flex-wrap'>
                     {bowlerArray.map((bowler, index) => (
-                        <ShoeInput key={index} bowlerNum={index + 1} />
+                        <ShoeInput key={index} bowlerNum={index + 1} handleShoeInput={handleShoeInput} />
                     ))}
                 </section>
                     
