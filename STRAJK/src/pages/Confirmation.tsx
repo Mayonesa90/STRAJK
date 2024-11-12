@@ -4,6 +4,8 @@ import Nav from '../components/Nav'
 import { useStore } from '../hooks/store'
 import { bookingRes } from "../interfaces/bookingInterface"
 import { useConfirmationStore } from "../hooks/store"
+import { Link} from 'react-router-dom'
+import { motion } from 'framer-motion'
 
 export default function Confirmation(){
 
@@ -12,7 +14,13 @@ export default function Confirmation(){
     const { confirmation, setConfirmation } = useConfirmationStore()
 
     return (
-        <main className='flex flex-col place-items-center'>
+        <motion.main 
+            className='flex flex-col place-items-center'
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }} // Fade-out animation on exit
+            transition={{ duration: 1 }}
+        >
             <Nav />
             <header className='flex flex-col place-items-center mt-5'>
                 <img src={FireIcon} alt="fire logo" className='w-[64px]' />
@@ -51,9 +59,16 @@ export default function Confirmation(){
                  </article>
                  
             ) : (
-                <article>No Booking!</article>
+                <article className='w-[344px] font-WorkSans text-center h-[30vh] text-xl flex flex-col place-content-center gap-4'>
+                    <h2>No active booking found</h2>
+                    <Link to='../booking'>
+                    <button className="bg-[#229a66] font-WorkSans font-bold text-white text-[24px] p-5 rounded-md tracking-wide hover:bg-[#19744c] ">
+                        Make a booking
+                    </button>
+                    </Link>
+                </article>
             )}
-            </main>
+            </motion.main>
            
     )
 }

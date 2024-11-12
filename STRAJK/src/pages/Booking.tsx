@@ -6,19 +6,13 @@ import Nav from '../components/Nav'
 import { bookingReq, bookingRes } from '../interfaces/bookingInterface'
 import { useStore, useConfirmationStore } from '../hooks/store'
 import { useNavigate } from 'react-router-dom'
+import { motion } from 'framer-motion'
 
 export default function Booking(){
     const today = new Date()
-    // const todaysDateValue = today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate()
     const todaysDateValue = today.toISOString().split("T")[0];  // ISO format for date
-    // const [date, setDate] = useState(todaysDateValue)
-    // const [time, setTime] = useState("21:00")
-    // const [numOfBowlers, setNumOfBowlers] = useState<number>(0)
-    // const [numOfLanes, setNumOfLanes] = useState<number>(1)
-    // const [bowlerArray, setBowlerArray] = useState<number[]>([0])
-    // const [shoeArray, setShoeArray] = useState<number[]>([0])
     const { setBooking } = useStore()
-    const { confirmation, setConfirmation } = useConfirmationStore()
+    const { setConfirmation } = useConfirmationStore()
     const navigate = useNavigate()
     
     const [formData, setFormData] = useState<bookingReq>({
@@ -29,7 +23,6 @@ export default function Booking(){
     })
     
     const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        // setDate(event.target.value)
         setFormData(prev => ({
             ...prev,
             when: `${event.target.value}T${formData.when.split("T")[1]}`
@@ -37,7 +30,6 @@ export default function Booking(){
     }
 
     const handleTimeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        // setTime(event.target.value)
         setFormData(prev => ({
             ...prev,
             when: `${formData.when.split("T")[0]}T${event.target.value}`
@@ -45,7 +37,6 @@ export default function Booking(){
     }
 
     const handleNumOfBowlers = (event: React.ChangeEvent<HTMLInputElement>) => {
-        // setNumOfBowlers(event.target.value)
         const people = parseInt(event.target.value);
         setFormData(prev => ({
             ...prev,
@@ -54,13 +45,7 @@ export default function Booking(){
         }));
     }
 
-    // useEffect(()=> {
-    //     const updatedBowlerArray = Array.from({ length: numOfBowlers }, (_, index) => index + 1)
-    //     setBowlerArray(updatedBowlerArray)
-    // }, [numOfBowlers])
-    
     const handleNumOfLanes = (event: React.ChangeEvent<HTMLInputElement>) => {
-        // setNumOfLanes(event.target.value)
         setFormData(prev => ({
             ...prev,
             lanes: parseInt(event.target.value)
@@ -68,9 +53,6 @@ export default function Booking(){
     }
 
     const handleShoeInput = (event: React.ChangeEvent<HTMLInputElement>, bowlerNum: number) => {
-        // const updatedShoeArray = [...shoeArray]
-        // updatedShoeArray[bowlerNum - 1] = event.target.value
-        // setShoeArray(updatedShoeArray)
         const newShoeArray = [...formData.shoes];
         newShoeArray[bowlerNum - 1] = parseInt(event.target.value);
         setFormData(prev => ({
@@ -88,14 +70,9 @@ export default function Booking(){
         try {
             const response = await fetch(url, {
                 method: 'POST',
-                // mode: 'cors',
-                // cache: 'no-cache',
-                // credentials: 'same-origin',
                 headers: {
                     [key]: value
                 },
-                // redirect: 'follow',
-                // referrerPolicy: 'no-referrer',
                 body: JSON.stringify(formData)
             });
     
@@ -109,18 +86,10 @@ export default function Booking(){
 
     const handleClick = async (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault()
-        // const updatedFormData ={
-        //     when: `${date}T${time}`,
-        //     lanes: numOfLanes,
-        //     people: numOfBowlers,
-        //     shoes: shoeArray
-        // }
-        // await setFormData(updatedFormData)
         await postData(formData)
         await setConfirmation(true)
         navigate('../confirmation')
     }
-    console.log(confirmation);
     
     useEffect(() => {
         if (formData.when) {
@@ -129,7 +98,12 @@ export default function Booking(){
     }, [formData]);
     
     return (
-        <main className='flex flex-col place-items-center'>
+        <motion.main 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }} // Fade-out animation on exit
+            transition={{ duration: 1 }} // Adjust duration for smoother exit
+            className='flex flex-col place-items-center'>
             <Nav />
             <header className='flex flex-col place-items-center mt-5'>
                 <img src={FireIcon} alt="fire logo" className='w-[64px]' />
@@ -198,6 +172,6 @@ export default function Booking(){
                     <PostBookingBtn handleClick={handleClick} />
                 </form>
                 
-        </main>
+        </motion.main>
     )
 }

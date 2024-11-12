@@ -8,7 +8,7 @@ export const useStore = create((set) => ({
 }))
 
 export const useConfirmationStore = create((set) => ({
-    confirmation: false,
+    confirmation: <boolean>false,
     setConfirmation: (confirmation : boolean) => set({ confirmation }),
     resetConfirmation: () => set({ confirmation: false })
 }))
