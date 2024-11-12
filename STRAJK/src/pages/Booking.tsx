@@ -4,53 +4,79 @@ import ShoeForm from '../components/ShoeForm'
 import PostBookingBtn from '../components/PostBookingBtn'
 import Nav from '../components/Nav'
 import { bookingReq, bookingRes } from '../interfaces/bookingInterface'
-import { useStore } from '../hooks/store'
+import { useStore, useConfirmationStore } from '../hooks/store'
 import { useNavigate } from 'react-router-dom'
 
 export default function Booking(){
     const today = new Date()
-    const todaysDateValue = today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate()
-    const [date, setDate] = useState(todaysDateValue)
-    const [time, setTime] = useState("21:00")
-    const [numOfBowlers, setNumOfBowlers] = useState<number>(0)
-    const [numOfLanes, setNumOfLanes] = useState<number>(1)
-    const [bowlerArray, setBowlerArray] = useState<number[]>([0])
-    const [shoeArray, setShoeArray] = useState<number[]>([0])
-    const { booking, setBooking } = useStore()
+    // const todaysDateValue = today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate()
+    const todaysDateValue = today.toISOString().split("T")[0];  // ISO format for date
+    // const [date, setDate] = useState(todaysDateValue)
+    // const [time, setTime] = useState("21:00")
+    // const [numOfBowlers, setNumOfBowlers] = useState<number>(0)
+    // const [numOfLanes, setNumOfLanes] = useState<number>(1)
+    // const [bowlerArray, setBowlerArray] = useState<number[]>([0])
+    // const [shoeArray, setShoeArray] = useState<number[]>([0])
+    const { setBooking } = useStore()
+    const { confirmation, setConfirmation } = useConfirmationStore()
     const navigate = useNavigate()
     
     const [formData, setFormData] = useState<bookingReq>({
-        when: "",
-        lanes: 0,
-        people: 0,
+        when: `${todaysDateValue}T21:00`,
+        lanes: 1,
+        people: 1,
         shoes: [0]
     })
-
-    const handleDateChange = (event) => {
-        setDate(event.target.value)
-    }
-
-    const handleTimeChange = (event: string) => {
-        setTime(event.target.value)
-    }
-
-    const handleNumOfBowlers = (event: number) => {
-        setNumOfBowlers(event.target.value)
-    }
-
-    useEffect(()=> {
-        const updatedBowlerArray = Array.from({ length: numOfBowlers }, (_, index) => index + 1)
-        setBowlerArray(updatedBowlerArray)
-    }, [numOfBowlers])
     
-    const handleNumOfLanes = (event: number) => {
-        setNumOfLanes(event.target.value)
+    const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        // setDate(event.target.value)
+        setFormData(prev => ({
+            ...prev,
+            when: `${event.target.value}T${formData.when.split("T")[1]}`
+        }))
     }
 
-    const handleShoeInput = (event, bowlerNum) => {
-        const updatedShoeArray = [...shoeArray]
-        updatedShoeArray[bowlerNum - 1] = event.target.value
-        setShoeArray(updatedShoeArray)        
+    const handleTimeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        // setTime(event.target.value)
+        setFormData(prev => ({
+            ...prev,
+            when: `${formData.when.split("T")[0]}T${event.target.value}`
+        }));
+    }
+
+    const handleNumOfBowlers = (event: React.ChangeEvent<HTMLInputElement>) => {
+        // setNumOfBowlers(event.target.value)
+        const people = parseInt(event.target.value);
+        setFormData(prev => ({
+            ...prev,
+            people,
+            shoes: Array(people).fill(0)  // Update shoe array based on number of bowlers
+        }));
+    }
+
+    // useEffect(()=> {
+    //     const updatedBowlerArray = Array.from({ length: numOfBowlers }, (_, index) => index + 1)
+    //     setBowlerArray(updatedBowlerArray)
+    // }, [numOfBowlers])
+    
+    const handleNumOfLanes = (event: React.ChangeEvent<HTMLInputElement>) => {
+        // setNumOfLanes(event.target.value)
+        setFormData(prev => ({
+            ...prev,
+            lanes: parseInt(event.target.value)
+        }));
+    }
+
+    const handleShoeInput = (event: React.ChangeEvent<HTMLInputElement>, bowlerNum: number) => {
+        // const updatedShoeArray = [...shoeArray]
+        // updatedShoeArray[bowlerNum - 1] = event.target.value
+        // setShoeArray(updatedShoeArray)
+        const newShoeArray = [...formData.shoes];
+        newShoeArray[bowlerNum - 1] = parseInt(event.target.value);
+        setFormData(prev => ({
+            ...prev,
+            shoes: newShoeArray
+        }));        
     }
 
     //POST TO API
@@ -62,38 +88,40 @@ export default function Booking(){
         try {
             const response = await fetch(url, {
                 method: 'POST',
-                mode: 'cors',
-                cache: 'no-cache',
-                credentials: 'same-origin',
+                // mode: 'cors',
+                // cache: 'no-cache',
+                // credentials: 'same-origin',
                 headers: {
                     [key]: value
                 },
-                redirect: 'follow',
-                referrerPolicy: 'no-referrer',
+                // redirect: 'follow',
+                // referrerPolicy: 'no-referrer',
                 body: JSON.stringify(formData)
             });
     
-            const data : bookingRes = await response.json();
-            return setBooking(data);
+            const result : bookingRes = await response.json();
+            return setBooking(result);
         } catch (error) {
             console.log(error);
         }
         
     }
 
-    const handleClick = async (event) => {
+    const handleClick = async (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault()
-        const updatedFormData ={
-            when: `${date}T${time}`,
-            lanes: numOfLanes,
-            people: numOfBowlers,
-            shoes: shoeArray
-        }
-        await setFormData(updatedFormData)
-        await postData(updatedFormData)
+        // const updatedFormData ={
+        //     when: `${date}T${time}`,
+        //     lanes: numOfLanes,
+        //     people: numOfBowlers,
+        //     shoes: shoeArray
+        // }
+        // await setFormData(updatedFormData)
+        await postData(formData)
+        await setConfirmation(true)
         navigate('../confirmation')
     }
-
+    console.log(confirmation);
+    
     useEffect(() => {
         if (formData.when) {
             postData(formData);
@@ -119,8 +147,9 @@ export default function Booking(){
                         <input
                             type="date"
                             id="date"
-                            placeholder={date}
-                            // min={today}
+                            placeholder={todaysDateValue} //funkar inte :(
+                            value={formData.when.split("T")[0]}
+                            min={todaysDateValue}
                             onChange={handleDateChange}
                             required
                             className="text-lg font-light text-black p-3  w-[160px] focus:outline-none [w-[160px]"
@@ -131,7 +160,7 @@ export default function Booking(){
                         <input
                             type="time"
                             id="time"
-                            value={time}
+                            value={formData.when.split("T")[1]}
                             min='11:00'
                             max='22:00'
                             required
@@ -165,7 +194,7 @@ export default function Booking(){
                         />
                     </fieldset>
                 </section>
-                    {numOfBowlers > 0 ? <ShoeForm bowlerArray={bowlerArray} handleShoeInput={handleShoeInput}/> : null}  
+                    {formData.people > 0 ? <ShoeForm bowlerArray={formData.shoes} handleShoeInput={handleShoeInput}/> : null}  
                     <PostBookingBtn handleClick={handleClick} />
                 </form>
                 

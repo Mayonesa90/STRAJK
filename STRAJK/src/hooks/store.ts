@@ -6,3 +6,9 @@ export const useStore = create((set) => ({
     setBooking: (booking : bookingRes) => set({ booking }),
     resetBooking: () => set({ booking: {} })
 }))
+
+export const useConfirmationStore = create((set) => ({
+    confirmation: false,
+    setConfirmation: (confirmation : boolean) => set({ confirmation }),
+    resetConfirmation: () => set({ confirmation: false })
+}))
