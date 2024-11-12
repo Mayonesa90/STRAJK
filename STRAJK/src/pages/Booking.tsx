@@ -5,6 +5,7 @@ import PostBookingBtn from '../components/PostBookingBtn'
 import Nav from '../components/Nav'
 import { bookingReq, bookingRes } from '../interfaces/bookingInterface'
 import { useStore } from '../hooks/store'
+import { useNavigate } from 'react-router-dom'
 
 export default function Booking(){
     const today = new Date()
@@ -16,6 +17,7 @@ export default function Booking(){
     const [bowlerArray, setBowlerArray] = useState<number[]>([0])
     const [shoeArray, setShoeArray] = useState<number[]>([0])
     const { booking, setBooking } = useStore()
+    const navigate = useNavigate()
     
     const [formData, setFormData] = useState<bookingReq>({
         when: "",
@@ -57,31 +59,39 @@ export default function Booking(){
     const url : string = "https://h5jbtjv6if.execute-api.eu-north-1.amazonaws.com"
 
     async function postData(formData : bookingReq) {
-        const response = await fetch(url, {
-            method: 'POST',
-            mode: 'cors',
-            cache: 'no-cache',
-            credentials: 'same-origin',
-            headers: {
-                [key]: value
-            },
-            redirect: 'follow',
-            referrerPolicy: 'no-referrer',
-            body: JSON.stringify(formData)
-        });
-
-        const data : bookingRes = await response.json();
-        return setBooking(data);
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                mode: 'cors',
+                cache: 'no-cache',
+                credentials: 'same-origin',
+                headers: {
+                    [key]: value
+                },
+                redirect: 'follow',
+                referrerPolicy: 'no-referrer',
+                body: JSON.stringify(formData)
+            });
+    
+            const data : bookingRes = await response.json();
+            return setBooking(data);
+        } catch (error) {
+            console.log(error);
+        }
+        
     }
 
-    const handleClick = (event) => {
+    const handleClick = async (event) => {
         event.preventDefault()
-        setFormData({
+        const updatedFormData ={
             when: `${date}T${time}`,
             lanes: numOfLanes,
             people: numOfBowlers,
             shoes: shoeArray
-        })
+        }
+        await setFormData(updatedFormData)
+        await postData(updatedFormData)
+        navigate('../confirmation')
     }
 
     useEffect(() => {
@@ -155,8 +165,8 @@ export default function Booking(){
                         />
                     </fieldset>
                 </section>
-                    {numOfBowlers > 0 ? <ShoeForm bowlerArray={bowlerArray} handleShoeInput={handleShoeInput}/> : null}
-                    <PostBookingBtn handleClick={handleClick} formData={formData} />
+                    {numOfBowlers > 0 ? <ShoeForm bowlerArray={bowlerArray} handleShoeInput={handleShoeInput}/> : null}  
+                    <PostBookingBtn handleClick={handleClick} />
                 </form>
                 
         </main>
