@@ -11,7 +11,7 @@ export default function Confirmation(){
 
     const booking = useStore()
     const { when, lanes, people, price, id } : bookingRes = booking.booking
-    const { confirmation, setConfirmation } = useConfirmationStore()
+    const { confirmation } = useConfirmationStore()
 
     return (
         <motion.main 

@@ -1,8 +1,8 @@
-import {useState} from 'react'
 import ShoeInput from './ShoeInput'
+import { ShoeFormProps } from '../interfaces/bookingInterface'
 
 
-export default function ShoeForm({bowlerArray, handleShoeInput}){    
+export default function ShoeForm({bowlerArray, handleShoeInput} : ShoeFormProps){    
     
     return (
         <section className='w-[344px] flex flex-col gap-4'>
@@ -12,7 +12,7 @@ export default function ShoeForm({bowlerArray, handleShoeInput}){
                     <hr  className=' border-s-2 border-custom-purple w-[30%]'/>
                 </header>
                 <section className='flex gap-6 flex-col flex-wrap'>
-                    {bowlerArray.map((bowler, index) => (
+                    {bowlerArray.map((_bowler, index) => (
                         <ShoeInput key={index} bowlerNum={index + 1} handleShoeInput={handleShoeInput} />
                     ))}
                 </section>

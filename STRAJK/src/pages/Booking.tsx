@@ -52,7 +52,7 @@ export default function Booking(){
         }));
     }
 
-    const handleShoeInput = (event: React.ChangeEvent<HTMLInputElement>, bowlerNum: number) => {
+    const handleShoeInput = (event: React.ChangeEvent<HTMLSelectElement>, bowlerNum: number) => {
         const newShoeArray = [...formData.shoes];
         newShoeArray[bowlerNum - 1] = parseInt(event.target.value);
         setFormData(prev => ({
@@ -149,7 +149,7 @@ export default function Booking(){
                         <input
                             type="number"
                             id="bowlers"
-                            placeholder='3 pers'
+                            placeholder='1 pers'
                             min={1}
                             onChange={handleNumOfBowlers}
                             required

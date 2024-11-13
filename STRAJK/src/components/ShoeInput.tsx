@@ -1,6 +1,6 @@
+import { ShoeInputProps } from "../interfaces/bookingInterface"
 
-
-export default function ShoeInput({bowlerNum, handleShoeInput}){
+export default function ShoeInput({bowlerNum, handleShoeInput} : ShoeInputProps){
  return (
     <fieldset className="border-2 border-custom-purple rounded-md w-full flex flex-col flex-shrink-0">
         <legend className="text-xs tracking-wide text-custom-purple  px-1">SHOE SIZE / PERSON {bowlerNum}</legend>
