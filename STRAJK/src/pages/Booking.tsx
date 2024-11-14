@@ -7,6 +7,8 @@ import { bookingReq, bookingRes } from '../interfaces/bookingInterface'
 import { useStore, useConfirmationStore } from '../hooks/store'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
+import { validateNumOfLanes } from '../validation/laneValidation'
+import ErrorMsg from '../components/ErrorMsg'
 
 export default function Booking(){
     const today = new Date()
@@ -14,6 +16,8 @@ export default function Booking(){
     const { setBooking } = useStore()
     const { setConfirmation } = useConfirmationStore()
     const navigate = useNavigate()
+    const [error, setError] = useState(false)
+    const [errorMessage, setErrorMessage] = useState("")
     
     const [formData, setFormData] = useState<bookingReq>({
         when: `${todaysDateValue}T21:00`,
@@ -46,6 +50,7 @@ export default function Booking(){
     }
 
     const handleNumOfLanes = (event: React.ChangeEvent<HTMLInputElement>) => {
+
         setFormData(prev => ({
             ...prev,
             lanes: parseInt(event.target.value)
@@ -67,20 +72,33 @@ export default function Booking(){
     const url : string = "https://h5jbtjv6if.execute-api.eu-north-1.amazonaws.com"
 
     async function postData(formData : bookingReq) {
-        try {
-            const response = await fetch(url, {
-                method: 'POST',
-                headers: {
-                    [key]: value
-                },
-                body: JSON.stringify(formData)
-            });
-    
-            const result : bookingRes = await response.json();
-            return setBooking(result);
-        } catch (error) {
-            console.log(error);
+
+        const lanesValidated = validateNumOfLanes(formData.people, formData.lanes)
+        //validate number of lanes and number of bowlers, max 4 bowlers per lane
+        if (lanesValidated) {
+            setError(false)
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        [key]: value
+                    },
+                    body: JSON.stringify(formData)
+                });
+        
+                const result : bookingRes = await response.json();
+                return setBooking(result);
+            } catch (error) {
+                setError(true)
+                console.log(error);
+            }
+        } else {
+            setErrorMessage("Max 4 bowlers / lane")
+            setError(true)
+            console.log('Max number of bowlers per lanes is 4');
         }
+
+        
         
     }
 
@@ -159,14 +177,16 @@ export default function Booking(){
                     <fieldset className="border-2 border-custom-purple rounded-md ">
                         <legend className="text-xs tracking-wide text-custom-purple  px-1">NUMBER OF LANES</legend>
                         <input
-                            type="text"
+                            type="number"
                             id="lanes"
+                            min={1}
                             placeholder='1 lane'
                             onChange={handleNumOfLanes}
                             required
                             className="placeholder:text-black bg-transparent text-2xl font-light text-black p-3  w-[160px] focus:outline-none"
                         />
                     </fieldset>
+                    {error ? <ErrorMsg message={errorMessage} /> : null}
                 </section>
                     {formData.people > 0 ? <ShoeForm bowlerArray={formData.shoes} handleShoeInput={handleShoeInput}/> : null}  
                     <PostBookingBtn handleClick={handleClick} />
