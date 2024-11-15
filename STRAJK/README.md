@@ -61,8 +61,8 @@ Ensure you have the following installed:
 ### Steps
 1. Clone the repository:
    ```bash
-   git clone <repository-url>
-   cd bowling-booking
+   git clone git@github.com:Mayonesa90/STRAJK.git
+   cd STRAJK/STRAJK
 
 2. Install dependencies:
     ```bash
