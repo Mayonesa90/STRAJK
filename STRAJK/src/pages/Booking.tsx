@@ -61,7 +61,16 @@ export default function Booking(){
 
     const handleShoeInput = (event: React.ChangeEvent<HTMLSelectElement>, bowlerNum: number) => {
         const newShoeArray = [...formData.shoes];
-        newShoeArray[bowlerNum - 1] = parseInt(event.target.value);        
+        const shoeSizeValue = parseInt(event.target.value);
+
+        const validShoeSize: shoeSize[] = [35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, null]
+        if(validShoeSize.includes(shoeSizeValue as shoeSize)){
+            newShoeArray[bowlerNum - 1] = shoeSizeValue as shoeSize;
+        } else {
+            console.log(`Invalid shoe size selected: ${shoeSizeValue}`);
+            return
+        }
+        
         setFormData(prev => ({
             ...prev,
             shoes: newShoeArray
@@ -93,12 +102,6 @@ export default function Booking(){
         
     }
 
-    console.log('shoes length: ', formData.shoes.length);
-    console.log('shoes: ', formData.shoes);
-    
-    console.log('people: ', formData.people);
-    
-    
     const handleClick = async (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault()
         const lanesValidated = validateNumOfLanes(formData.people, formData.lanes)

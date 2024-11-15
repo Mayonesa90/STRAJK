@@ -24,7 +24,7 @@ export interface BowlerArray {
 }
 
 export interface ShoeFormProps {
-    bowlerArray: number[],
+    bowlerArray: shoeSize[],
     handleShoeInput: (event: React.ChangeEvent<HTMLSelectElement>, bowlerNum: number) => void
 }
 
