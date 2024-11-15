@@ -80,19 +80,6 @@ Ensure you have the following installed:
 
 ---
 
-## Project Structure
-src/
-├── assets/                # Static assets (images, icons, etc.)
-├── components/            # Reusable UI components (Nav, ShoeForm, etc.)
-├── hooks/                 # Zustand stores and custom hooks
-├── interfaces/            # TypeScript interfaces for state and API models
-├── pages/                 # Main application pages (Loading, Booking, etc.)
-├── validation/            # Form validation logic
-├── animationVariants/     # Framer Motion animation configurations
-└── App.tsx                # Application root component
-
----
-
 ## API Integration
 
 Endpoint:
@@ -112,8 +99,9 @@ Example JSON payload:
     "people": 3,
     "shoes": [42, 38, 40]
   }
+  ```
 
-### Response
+### Response:
 
 Expected successful response:
   ```json
@@ -126,3 +114,4 @@ Expected successful response:
       "id": "str7283472", 
       "active": true 
     }
+  ```
