@@ -113,10 +113,10 @@ Example JSON payload:
     "shoes": [42, 38, 40]
   }
 
-  ### Response
+### Response
 
-  Expected successful response:
-    ```json
+Expected successful response:
+  ```json
     {
       "when": "2022-11-11T18:00", 
       "lanes": 1, 
