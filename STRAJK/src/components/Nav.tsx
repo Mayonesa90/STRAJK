@@ -14,7 +14,7 @@ export default function Nav(){
     return (
         <>
         {menuOpen ? 
-        <nav className='bg-custom-black absolute top-0 left-0 w-full h-full flex flex-col  items-center'>
+        <nav className='bg-custom-black absolute top-0 left-0 w-full h-full flex flex-col  items-center z-50'>
             <button onClick={toggleMenu} className=' absolute top-[22px] left-[23px]'>
                 <img src={NavIconOpen} alt="" />
             </button> 

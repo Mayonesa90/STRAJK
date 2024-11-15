@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import FireRed from '../assets/fire-red.svg'
 import FireOrange from '../assets/fire-orange.svg'
 import FireYellow from '../assets/fire-yellow.svg'
+import { fireVariants, childVariants } from '../animationVariants/fireVariants'
 
 export default function Loading(){
     const navigate = useNavigate();
@@ -16,21 +17,6 @@ export default function Loading(){
         // Cleanup function to clear the timer if the component unmounts
         return () => clearTimeout(timer);
     }, [navigate]);
-
-
-    const fireVariants = {
-        initial: {},
-        animate: {
-            transition: {
-                staggerChildren: 0.5, // Stagger timing
-            },
-        },
-    };
-
-    const childVariants = {
-        initial: { rotate: 0 }, // Start state
-        animate: { rotate: [0, 10, 0], transition: { duration: 1, repeat: Infinity } }
-    };
 
     return (
         <motion.main 

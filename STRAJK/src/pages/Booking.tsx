@@ -1,4 +1,7 @@
-import FireIcon from '../assets/fire-icon.svg'
+import FireYellow from '../assets/fire-yellow.svg'
+import FireOrange from '../assets/fire-orange.svg'
+import FireRed from '../assets/fire-red.svg'
+import { fireVariants, childVariants } from "../animationVariants/fireVariants"
 import { useState, useEffect } from 'react'
 import ShoeForm from '../components/ShoeForm'
 import PostBookingBtn from '../components/PostBookingBtn'
@@ -137,7 +140,31 @@ export default function Booking(){
             className='flex flex-col place-items-center bg-[#C69DD2] min-h-screen h-fit'>
             <Nav />
             <header className='flex flex-col place-items-center mt-5'>
-                <img src={FireIcon} alt="fire logo" className='w-[64px]' />
+                <motion.div 
+                    className='relative h-[96px] w-[64px]'
+                    variants={fireVariants}
+                    animate={'animate'}
+                    initial={'initial'}
+                >
+                    <motion.img 
+                        src={FireYellow} 
+                        alt="" 
+                        className='absolute z-0 bottom-0 '
+                        variants={childVariants} 
+                    />
+                    <motion.img 
+                        src={FireOrange} 
+                        alt="" 
+                        className='absolute z-10 bottom-3 left-[25%] w-[41px]' 
+                        variants={childVariants}
+                    />
+                    <motion.img 
+                        src={FireRed} 
+                        alt="" 
+                        className='absolute z-20 bottom-0 left-[10%] w-[54px]' 
+                        variants={childVariants}
+                    />
+                </motion.div>                
                 <h1 className=' font-BebasNeune text-custom-red text-[60px] tracking-wide'>BOOKING</h1>
             </header>
             <form action="POST" className='w-[344px] flex flex-col gap-4'>
