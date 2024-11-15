@@ -3,12 +3,13 @@ import { useState, useEffect } from 'react'
 import ShoeForm from '../components/ShoeForm'
 import PostBookingBtn from '../components/PostBookingBtn'
 import Nav from '../components/Nav'
-import { bookingReq, bookingRes } from '../interfaces/bookingInterface'
+import { bookingReq, bookingRes, shoeSize } from '../interfaces/bookingInterface'
 import { useStore, useConfirmationStore } from '../hooks/store'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { validateNumOfLanes } from '../validation/laneValidation'
 import ErrorMsg from '../components/ErrorMsg'
+import { shoeValidation } from '../validation/shoeValidation'
 
 export default function Booking(){
     const today = new Date()
@@ -23,9 +24,10 @@ export default function Booking(){
         when: `${todaysDateValue}T21:00`,
         lanes: 1,
         people: 1,
-        shoes: [0]
+        shoes: [null]
     })
-    
+
+
     const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setFormData(prev => ({
             ...prev,
@@ -45,7 +47,7 @@ export default function Booking(){
         setFormData(prev => ({
             ...prev,
             people,
-            shoes: people ? Array(people).fill(0) : [0] // Update shoe array based on number of bowlers
+            shoes: people ? Array(people).fill(null) : [null] // Update shoe array based on number of bowlers
         }));
     }
 
@@ -59,7 +61,7 @@ export default function Booking(){
 
     const handleShoeInput = (event: React.ChangeEvent<HTMLSelectElement>, bowlerNum: number) => {
         const newShoeArray = [...formData.shoes];
-        newShoeArray[bowlerNum - 1] = parseInt(event.target.value);
+        newShoeArray[bowlerNum - 1] = parseInt(event.target.value);        
         setFormData(prev => ({
             ...prev,
             shoes: newShoeArray
@@ -73,10 +75,6 @@ export default function Booking(){
 
     async function postData(formData : bookingReq) {
 
-        const lanesValidated = validateNumOfLanes(formData.people, formData.lanes)
-        //validate number of lanes and number of bowlers, max 4 bowlers per lane
-        if (lanesValidated) {
-            setError(false)
             try {
                 const response = await fetch(url, {
                     method: 'POST',
@@ -92,20 +90,32 @@ export default function Booking(){
                 setError(true)
                 console.log(error);
             }
-        } else {
-            setErrorMessage("Max 4 bowlers / lane")
-            setError(true)
-            console.log('Max number of bowlers per lanes is 4');
-        }
-
-        
         
     }
 
+    console.log('shoes length: ', formData.shoes.length);
+    console.log('shoes: ', formData.shoes);
+    
+    console.log('people: ', formData.people);
+    
+    
     const handleClick = async (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault()
+        const lanesValidated = validateNumOfLanes(formData.people, formData.lanes)
+        const shoesValidated = shoeValidation(formData.shoes, formData.people)
+        if (!lanesValidated) {
+            setErrorMessage("Max 4 bowlers / lane")
+            setError(true)
+            return;
+        }
+        if(!shoesValidated){
+            setErrorMessage("Please select a shoe size for each bowler")
+            setError(true)
+            return;
+        }
+        setError(false)
         await postData(formData)
-        await setConfirmation(true)
+        setConfirmation(true)
         navigate('../confirmation')
     }
     

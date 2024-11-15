@@ -1,9 +1,11 @@
+export type shoeSize = 35 | 36 | 37 | 38 | 39 | 40 | 41 | 42 | 43 | 44 | 45 | 46 | 47 | null
+
 
 export interface bookingReq {
     when: string,
     lanes: number,
     people: number,
-    shoes: number[]
+    shoes: shoeSize[]
 }
 
 export interface bookingRes {

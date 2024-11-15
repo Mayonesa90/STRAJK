@@ -3,6 +3,7 @@ import { ShoeFormProps } from '../interfaces/bookingInterface'
 
 
 export default function ShoeForm({bowlerArray, handleShoeInput} : ShoeFormProps){    
+    // console.log('bowlerArray: ', bowlerArray);
     
     return (
         <section className='w-[344px] flex flex-col gap-4'>

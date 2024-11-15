@@ -6,11 +6,12 @@ export default function ShoeInput({bowlerNum, handleShoeInput} : ShoeInputProps)
         <legend className="text-xs tracking-wide text-custom-purple  px-1">SHOE SIZE / PERSON {bowlerNum}</legend>
             <select 
                 name="" 
-                id="shoeSize" 
+                id="shoeSize"
                 required
                 className="bg-transparent text-2xl font-light text-black p-3 w-full focus:outline-none"
-                onChange={(event) => handleShoeInput(event, bowlerNum)}
+                onChange={(event : React.ChangeEvent<HTMLSelectElement>) => handleShoeInput(event, bowlerNum)}
                 >
+                    <option value="">-- select size --</option>
                     <option value="35">Euro 35</option>
                     <option value="36">Euro 36</option>
                     <option value="37">Euro 37</option>
