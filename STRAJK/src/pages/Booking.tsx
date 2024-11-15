@@ -13,6 +13,7 @@ import { motion } from 'framer-motion'
 import { validateNumOfLanes } from '../validation/laneValidation'
 import ErrorMsg from '../components/ErrorMsg'
 import { shoeValidation } from '../validation/shoeValidation'
+import { pageVariants } from '../animationVariants/pageVariants'
 
 export default function Booking(){
     const today = new Date()
@@ -130,13 +131,15 @@ export default function Booking(){
             postData(formData);
         }
     }, [formData]);
+
+    
     
     return (
         <motion.main 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }} // Fade-out animation on exit
-            transition={{ duration: 1 }} // Adjust duration for smoother exit
+            initial="initial"
+            animate="animate"
+            exit={{ opacity: 0 }}
+            variants={pageVariants} 
             className='flex flex-col place-items-center bg-[#C69DD2] min-h-screen h-fit'>
             <Nav />
             <header className='flex flex-col place-items-center mt-5'>

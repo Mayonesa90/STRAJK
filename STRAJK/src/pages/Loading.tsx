@@ -5,6 +5,7 @@ import FireRed from '../assets/fire-red.svg'
 import FireOrange from '../assets/fire-orange.svg'
 import FireYellow from '../assets/fire-yellow.svg'
 import { fireVariants, childVariants } from '../animationVariants/fireVariants'
+import { pageVariants } from '../animationVariants/pageVariants';
 
 export default function Loading(){
     const navigate = useNavigate();
@@ -21,10 +22,10 @@ export default function Loading(){
     return (
         <motion.main 
             className='flex flex-col place-items-center h-full items-center place-content-center bg-[#C69DD2] '
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }} 
-            transition={{ duration: 1 }}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            variants={pageVariants} // Apply page variants
         >
                 <motion.div 
                     className='relative h-[196px] w-[136px]'
